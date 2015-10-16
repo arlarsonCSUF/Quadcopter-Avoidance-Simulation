@@ -37,9 +37,13 @@ namespace QuadcopterAvoidanceSimulation
             for (int i = 0; i < walls.Obstacles.Count; i++)
             {
                 Obstacle o = (Obstacle)walls.Obstacles[i];
-                g.FillRectangle(blackBrush,o.xPosition,o.yPosition,o.width,o.height);
+                //g.FillRectangle(blackBrush,o.xPosition,o.yPosition,o.width,o.height);
             }
-            g.DrawString(Convert.ToString(mainQuad.xPosition) + "\t\t\t" + Convert.ToString(mainQuad.velocityX), DefaultFont, blackBrush, new PointF(300, 300));
+            int x = Convert.ToInt32(mainQuad.xPosition);
+            int y = Convert.ToInt32(mainQuad.yPosition);
+
+            g.FillEllipse(blackBrush,x,y,5,5);
+            //g.DrawString(Convert.ToString(mainQuad.xPosition) + "\t\t\t" + Convert.ToString(mainQuad.velocityX), DefaultFont, blackBrush, new PointF(300, 300));
                 
             g.Dispose();
         }

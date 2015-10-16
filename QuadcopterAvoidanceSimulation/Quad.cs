@@ -13,7 +13,7 @@ namespace QuadcopterAvoidanceSimulation
         {
             _xPosition = x;
             _yPosition = y;
-            thrustAcceleration = 1;
+            thrustAcceleration = 10;
             pitchAngle = Equations.toRad(0);
             rollAngle = Equations.toRad(0);
             yawAngle = Equations.toRad(0);
@@ -43,8 +43,8 @@ namespace QuadcopterAvoidanceSimulation
 
             accelerationRelativeToQuad.X = Equations.yComponentOfVector(rollAngle,thrustAcceleration);
             accelerationRelativeToQuad.Y = Equations.yComponentOfVector(pitchAngle, thrustAcceleration);
+            acceleration.Y = Equations.vectorProjection(accelerationRelativeToQuad, Equations.orthagonalVector(quadHeading));
             acceleration.X = Equations.vectorProjection(accelerationRelativeToQuad, quadHeading);
-            acceleration.Y = Equations.vectorProjection(accelerationRelativeToQuad, quadHeading);
 
             _xPosition = Equations.kinematics3(_xPosition, velocity.X, acceleration.X,dT);
             _yPosition = Equations.kinematics3(_yPosition, velocity.Y, acceleration.Y,dT);

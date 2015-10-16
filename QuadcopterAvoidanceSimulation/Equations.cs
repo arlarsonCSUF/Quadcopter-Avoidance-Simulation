@@ -81,6 +81,12 @@ namespace QuadcopterAvoidanceSimulation
             return dotProduct(a, b) / b.Length;
         }
 
+        public static Vector orthagonalVector(Vector a)
+        {
+            Vector V = new Vector(a.Y, -1 * a.X);
+            return V;
+        }
+
         public static double toDeg(double rad)
         {
             return rad * 57.2957795; 
