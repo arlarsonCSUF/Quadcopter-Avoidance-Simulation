@@ -31,6 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.mainViewPort = new System.Windows.Forms.Panel();
             this.viewPortUpdate = new System.Windows.Forms.Timer(this.components);
+            this.labelPitch = new System.Windows.Forms.Label();
+            this.labelRoll = new System.Windows.Forms.Label();
+            this.labelYaw = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainViewPort
@@ -48,16 +51,47 @@
             this.viewPortUpdate.Interval = 60;
             this.viewPortUpdate.Tick += new System.EventHandler(this.viewPortUpdate_Tick);
             // 
+            // labelPitch
+            // 
+            this.labelPitch.AutoSize = true;
+            this.labelPitch.Location = new System.Drawing.Point(682, 12);
+            this.labelPitch.Name = "labelPitch";
+            this.labelPitch.Size = new System.Drawing.Size(35, 13);
+            this.labelPitch.TabIndex = 0;
+            this.labelPitch.Text = "label1";
+            // 
+            // labelRoll
+            // 
+            this.labelRoll.AutoSize = true;
+            this.labelRoll.Location = new System.Drawing.Point(682, 39);
+            this.labelRoll.Name = "labelRoll";
+            this.labelRoll.Size = new System.Drawing.Size(35, 13);
+            this.labelRoll.TabIndex = 0;
+            this.labelRoll.Text = "label1";
+            // 
+            // labelYaw
+            // 
+            this.labelYaw.AutoSize = true;
+            this.labelYaw.Location = new System.Drawing.Point(682, 66);
+            this.labelYaw.Name = "labelYaw";
+            this.labelYaw.Size = new System.Drawing.Size(35, 13);
+            this.labelYaw.TabIndex = 0;
+            this.labelYaw.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(876, 581);
+            this.Controls.Add(this.labelYaw);
+            this.Controls.Add(this.labelRoll);
+            this.Controls.Add(this.labelPitch);
             this.Controls.Add(this.mainViewPort);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -65,6 +99,9 @@
 
         private System.Windows.Forms.Panel mainViewPort;
         private System.Windows.Forms.Timer viewPortUpdate;
+        private System.Windows.Forms.Label labelPitch;
+        private System.Windows.Forms.Label labelRoll;
+        private System.Windows.Forms.Label labelYaw;
     }
 }
 

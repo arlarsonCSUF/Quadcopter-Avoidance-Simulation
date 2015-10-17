@@ -58,7 +58,9 @@ namespace QuadcopterAvoidanceSimulation
             int y = Convert.ToInt32(mainViewPort.Height - mainQuad.yPosition);
             int x2 = Convert.ToInt32(x - 20 * mainQuad.quadHeadingVector.X);
             int y2 = Convert.ToInt32(y - 20 * mainQuad.quadHeadingVector.Y);
-           
+            labelPitch.Text = "Pitch: " + Convert.ToString(Equations.toDeg(mainQuad.pitch));
+            labelRoll.Text = "Roll: " + Convert.ToString(Equations.toDeg(mainQuad.roll));
+            labelYaw.Text = "Yaw: " + Convert.ToString(Equations.toDeg(mainQuad.yaw) % 360);
             g.FillEllipse(blackBrush,x,y,4,4);
             g.DrawLine(blackPen,x+2,y+2,x2,y2);
             g.Dispose();
