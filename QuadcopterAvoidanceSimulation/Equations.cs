@@ -52,7 +52,7 @@ namespace QuadcopterAvoidanceSimulation
 
         public static Vector polarToCartesian(double theta, double magnitude)
         {
-            Vector v = new Vector(magnitude * Math.Cos(theta), magnitude * Math.Sin(theta));
+            Vector v = new Vector(magnitude * Math.Sin(theta), magnitude * Math.Cos(theta));
             return v;
         }
 
@@ -107,7 +107,6 @@ namespace QuadcopterAvoidanceSimulation
         public static Vector dragVector(double cDrag,Vector velocity)
         {
             double magnitudeOfDrag = -1 * cDrag * velocity.LengthSquared/2;
-            Console.WriteLine(magnitudeOfDrag);
             Vector V = new Vector(magnitudeOfDrag * velocity.X, magnitudeOfDrag * velocity.Y);
             return V;
         }

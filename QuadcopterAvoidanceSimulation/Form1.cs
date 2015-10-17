@@ -46,20 +46,21 @@ namespace QuadcopterAvoidanceSimulation
 
         private void mainViewPort_Paint(object sender, PaintEventArgs e)
         {
-            Pen blackPen = new Pen(Color.Black, 3);
+            Pen blackPen = new Pen(Color.Black, 1);
             SolidBrush blackBrush = new SolidBrush(Color.Black);
             Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             for (int i = 0; i < walls.Obstacles.Count; i++)
             {
                 Obstacle o = (Obstacle)walls.Obstacles[i];
-                //g.FillRectangle(blackBrush,o.xPosition,o.yPosition,o.width,o.height);
             }
             int x = Convert.ToInt32(mainQuad.xPosition);
-            int y = Convert.ToInt32(mainQuad.yPosition);
-
-            g.FillEllipse(blackBrush,x,y,5,5);
-            //g.DrawString(Convert.ToString(mainQuad.xPosition) + "\t\t\t" + Convert.ToString(mainQuad.velocityX), DefaultFont, blackBrush, new PointF(300, 300));
-                
+            int y = Convert.ToInt32(mainViewPort.Height - mainQuad.yPosition);
+            int x2 = Convert.ToInt32(x - 20 * mainQuad.quadHeadingVector.X);
+            int y2 = Convert.ToInt32(y - 20 * mainQuad.quadHeadingVector.Y);
+           
+            g.FillEllipse(blackBrush,x,y,4,4);
+            g.DrawLine(blackPen,x+2,y+2,x2,y2);
             g.Dispose();
         }
 
@@ -108,8 +109,10 @@ namespace QuadcopterAvoidanceSimulation
 
                 mainQuad.roll = Equations.toRad(joystick.Xaxis / 2.0);
                 mainQuad.pitch = Equations.toRad(-1*joystick.Yaxis / 2.0);
-                //mainQuad.yawRate = Equations.toRad(joystick.Zaxis / 2.0);
+                mainQuad.yawRate = Equations.toRad(-1*joystick.Zaxis);
                //Console.WriteLine(Equations.toDeg(mainQuad.yaw));
+                if(joystickButtons[0] == true)
+                    mainQuad.resetQuad();
                 for (int i = 0; i < joystickButtons.Length; i++)
                 {
                     if (joystickButtons[i] == true)

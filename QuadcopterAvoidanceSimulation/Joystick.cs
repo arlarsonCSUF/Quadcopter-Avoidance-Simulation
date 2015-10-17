@@ -28,9 +28,9 @@ namespace QuadcopterAvoidanceSimulation
             hWnd = window_handle;
             Xaxis = -1;
 
-            calX = 34588 - 65536 / 2;
-            calY = 31743 - 65536 / 2;
-            calZ = 31743 - 65536 / 2;
+            calX = 32767 - 65536 / 2;
+            calY = 32767 - 65536 / 2;
+            calZ = 32767 - 65536 / 2;
         }
 
         public string FindJoysticks()
@@ -116,7 +116,7 @@ namespace QuadcopterAvoidanceSimulation
 
             Xaxis = Equations.map(state.X - calX, 0, 65536, -100, 100);
             Yaxis = Equations.map(state.Y - calY,0,65536,-100,100);
-            Zaxis = Equations.map(state.Z - calZ, 0, 65536, -100, 100);
+            Zaxis = Equations.map(state.Rz - calZ, 0, 65536, -100, 100);
             
             byte[] jsButtons = state.GetButtons();
             buttons = new bool[jsButtons.Length];
