@@ -97,5 +97,20 @@ namespace QuadcopterAvoidanceSimulation
             return deg * 0.01745329251;
         }
 
+        public static double map(double input, double fromLow, double fromHigh, double toLow, double toHigh){
+            double fRange = fromHigh - fromLow;
+            double tRange = toHigh - toLow;
+            double scale = tRange/fRange;
+            return input * scale - toHigh;
+        }
+
+        public static Vector dragVector(double cDrag,Vector velocity)
+        {
+            double magnitudeOfDrag = -1 * cDrag * velocity.LengthSquared/2;
+            Console.WriteLine(magnitudeOfDrag);
+            Vector V = new Vector(magnitudeOfDrag * velocity.X, magnitudeOfDrag * velocity.Y);
+            return V;
+        }
+
     }
 }

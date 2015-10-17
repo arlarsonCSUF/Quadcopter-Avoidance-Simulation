@@ -13,9 +13,10 @@ namespace QuadcopterAvoidanceSimulation
         {
             _xPosition = x;
             _yPosition = y;
-            thrustAcceleration = 10;
+            thrustAcceleration = 100;
+            coeffiecientOfDrag = 1;
             pitchAngle = Equations.toRad(0);
-            rollAngle = Equations.toRad(0);
+            rollAngle = Equations.toRad(30);
             yawAngle = Equations.toRad(0);
             wPitch = 0;
             wRoll = 0;
@@ -32,6 +33,11 @@ namespace QuadcopterAvoidanceSimulation
         public double xPosition {get {return _xPosition;} set {_xPosition = value;}}
         public double yPosition { get {return _yPosition; } set {_yPosition = value;}}
         public double velocityX { get { return velocity.X; } set { velocity.X = value;}}
+        public double roll { get{return rollAngle;} set{rollAngle = value;} }
+        public double pitch { get { return pitchAngle; } set { pitchAngle = value; } }
+        public double yaw { get { return yawAngle; } set { yawAngle = value; } }
+        public double yawRate { get { return wYaw; } set { wYaw = value; } }
+
 
         public void updateState(){
             double dT = (time.micros - previousUpdateTime) / 1000000.0; //dT in seconds
@@ -46,8 +52,11 @@ namespace QuadcopterAvoidanceSimulation
             acceleration.Y = Equations.vectorProjection(accelerationRelativeToQuad, Equations.orthagonalVector(quadHeading));
             acceleration.X = Equations.vectorProjection(accelerationRelativeToQuad, quadHeading);
 
-            _xPosition = Equations.kinematics3(_xPosition, velocity.X, acceleration.X,dT);
-            _yPosition = Equations.kinematics3(_yPosition, velocity.Y, acceleration.Y,dT);
+            Vector dragForce = Equations.dragVector(coeffiecientOfDrag, velocity);
+            Vector netAcceleration = Vector.Add(acceleration, dragForce);
+
+            _xPosition = Equations.kinematics3(_xPosition, velocity.X, netAcceleration.X, dT);
+            _yPosition = Equations.kinematics3(_yPosition, velocity.Y, netAcceleration.Y, dT);
             
             velocity.X = Equations.kinematics1(velocity.X, acceleration.X, dT);
             velocity.Y = Equations.kinematics1(velocity.Y, acceleration.Y, dT);
@@ -59,6 +68,7 @@ namespace QuadcopterAvoidanceSimulation
         private double _xPosition, _yPosition;
         private double pitchAngle,rollAngle,yawAngle;
         private double thrustAcceleration;
+        private double coeffiecientOfDrag;
         private double wPitch, wRoll,wYaw;
         private Vector velocity;
         private Vector acceleration;
