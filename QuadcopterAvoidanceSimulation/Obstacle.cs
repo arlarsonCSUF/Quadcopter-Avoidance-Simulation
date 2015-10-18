@@ -9,22 +9,25 @@ namespace QuadcopterAvoidanceSimulation
 {
     class Obstacle
     {
-        public Obstacle(int x, int y, int w, int h)
+        public Obstacle(int x1, int y1, int x2, int y2)
         {
-            _xPosition = x;
-            _yPosition = y;
-            _width = w;
-            _height = h;
+            _x1 = x1;
+            _y1 = y1;
+            _x2 = x2;
+            _y2 = y2;
         }
 
-        public int xPosition{ get{return _xPosition;} set{_xPosition = value;}}
-        public int yPosition{ get{ return _yPosition; } set { _yPosition = value;}}
-        public int height { get { return _height; } set {_height = value;}}
-        public int width { get { return _width; } set { _width = value; }} 
+        public int x1{ get{return _x1;} set{_x1 = value;}}
+        public int y1{ get{ return _y1; } set { _y1 = value;}}
+        public int x2 { get { return _x2; } set {_x2 = value;}}
+        public int y2 { get { return _y2; } set { _y2 = value; }}
+        public Point p1 { get { return new Point(x1, y1); } }
+        public Point p2 { get { return new Point(x2, y2); } }
         
         private
-            int _xPosition,_yPosition; //cord. of top left corner
-            int _width,_height;
+            int _x1,_y1; //cord. of top left corner
+            int _x2,_y2;
+            Point _p1, _p2;
             
     }
 }

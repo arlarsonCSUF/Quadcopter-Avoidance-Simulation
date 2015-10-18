@@ -53,6 +53,7 @@ namespace QuadcopterAvoidanceSimulation
             for (int i = 0; i < walls.Obstacles.Count; i++)
             {
                 Obstacle o = (Obstacle)walls.Obstacles[i];
+                g.DrawLine(blackPen, o.p1, o.p2);
             }
             int x = Convert.ToInt32(mainQuad.xPosition);
             int y = Convert.ToInt32(mainViewPort.Height - mainQuad.yPosition);
