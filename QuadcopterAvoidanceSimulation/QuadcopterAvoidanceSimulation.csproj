@@ -60,6 +60,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="HSLColor.cs" />
     <Compile Include="Joystick.cs" />
     <Compile Include="LIDAR.cs" />
     <Compile Include="Obstacle.cs" />

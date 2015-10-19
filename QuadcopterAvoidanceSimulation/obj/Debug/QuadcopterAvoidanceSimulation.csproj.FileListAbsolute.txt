@@ -33,3 +33,4 @@ C:\Users\arlarson\Documents\GitHub\Quadcopter-Avoidance-Simulation\QuadcopterAvo
 C:\Users\arlarson\Documents\GitHub\Quadcopter-Avoidance-Simulation\QuadcopterAvoidanceSimulation\obj\Debug\QuadcopterAvoidanceSimulation.Form1.resources
 C:\Users\arlarson\Documents\GitHub\Quadcopter-Avoidance-Simulation\QuadcopterAvoidanceSimulation\obj\Debug\QuadcopterAvoidanceSimulation.Properties.Resources.resources
 C:\Users\arlarson\Documents\GitHub\Quadcopter-Avoidance-Simulation\QuadcopterAvoidanceSimulation\obj\Debug\QuadcopterAvoidanceSimulation.csproj.GenerateResource.Cache
+C:\Users\arlarson\Documents\GitHub\Quadcopter-Avoidance-Simulation\QuadcopterAvoidanceSimulation\obj\Debug\QuadcopterAvoidanceSimulation.csprojResolveAssemblyReference.cache

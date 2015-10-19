@@ -12,6 +12,7 @@ using System.Management;
 using System.Drawing.Imaging;
 using System.Collections;
 using Microsoft.DirectX.DirectInput;
+//using Microsoft
 
 namespace QuadcopterAvoidanceSimulation
 {
@@ -132,8 +133,25 @@ namespace QuadcopterAvoidanceSimulation
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            Drawing.drawPolarGraph(g, lidarSensorViewPort);
-            Drawing.drawPolarPoint(g, lidarSensorViewPort, 0.5, LIDAR1.angle);
+            if (LIDAR1.dataPoints.Count > 0)
+            {
+                for (int i = 0; i < LIDAR1.dataPoints.Count; i++)
+                {
+                    Equations.PolarPoint p = (Equations.PolarPoint)LIDAR1.dataPoints[i];
+                    double angle = p.theta;
+                    double r = p.radius;
+                    double hue = i/4.0;
+                    HSLColor c = new HSLColor(hue,255,100);
+                    
+                    Drawing.drawPolarPoint(g,lidarSensorViewPort,c,r,angle);
+                }
+                if(LIDAR1.dataPoints.Count > 255)
+                    LIDAR1.dataPoints.RemoveAt(0);
+            }
+            
+            //Console.WriteLine(LIDAR1.dataPoints.Count);
+            Drawing.drawPolarGraph(g, lidarSensorViewPort);   
+           
         }
 
     }

@@ -64,9 +64,9 @@ namespace QuadcopterAvoidanceSimulation
                 g.DrawString(Convert.ToString(i), mainFont, blackBrush, textLocation);
             }
         }
-        public static void drawPolarPoint(Graphics g, Panel p, double r, double theta)
+        public static void drawPolarPoint(Graphics g, Panel p,Color c, double r, double theta)
         {
-            SolidBrush redBrush = new SolidBrush(Color.Red);
+            SolidBrush redBrush = new SolidBrush(c);
 
             int width = p.Width;
             int height = p.Height;
@@ -81,7 +81,7 @@ namespace QuadcopterAvoidanceSimulation
 
             int x = Convert.ToInt32(radius * r * Math.Sin(theta));
             int y = Convert.ToInt32(radius * r * Math.Cos(theta));
-            if (r < 1 & r > 0)
+            if (r < 1 & r >= 0)
                 g.FillEllipse(redBrush, center.X + x - 2, center.Y - y - 2, 4, 4);
             else
                 Console.WriteLine("r is out of range");
