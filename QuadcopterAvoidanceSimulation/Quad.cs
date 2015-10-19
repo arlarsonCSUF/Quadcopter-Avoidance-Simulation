@@ -59,7 +59,7 @@ namespace QuadcopterAvoidanceSimulation
 
            Vector dragForce = Equations.dragVector(coeffiecientOfDrag, velocity);
            Vector netAcceleration = Vector.Add(acceleration, dragForce);
-
+         
            /*Console.Write(acceleration.Length);
            Console.Write("\t");
            Console.WriteLine(netAcceleration.Length);*/

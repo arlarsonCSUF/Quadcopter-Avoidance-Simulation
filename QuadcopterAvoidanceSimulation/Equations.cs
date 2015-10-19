@@ -111,5 +111,15 @@ namespace QuadcopterAvoidanceSimulation
             return V;
         }
 
+        public struct intersection
+        {
+            public bool isIntersection;
+            public Point p;
+        }
+
+        public struct lineSegment
+        {
+            public double x1, y1, x2, y2;
+        }
     }
 }

@@ -57,6 +57,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Joystick.cs" />
+    <Compile Include="LIDAR.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="ObstacleLayout.cs" />
     <Compile Include="Program.cs" />
