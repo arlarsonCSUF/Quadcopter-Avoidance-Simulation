@@ -1,4 +1,5 @@
-﻿namespace QuadcopterAvoidanceSimulation
+﻿using System.Windows.Forms;
+namespace QuadcopterAvoidanceSimulation
 {
     partial class Form1
     {
@@ -29,22 +30,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.mainViewPort = new System.Windows.Forms.Panel();
             this.viewPortUpdate = new System.Windows.Forms.Timer(this.components);
             this.labelPitch = new System.Windows.Forms.Label();
             this.labelRoll = new System.Windows.Forms.Label();
             this.labelYaw = new System.Windows.Forms.Label();
-            this.lidarSensorViewPort = new System.Windows.Forms.Panel();
+            this.lidarSensorViewPort = new QuadcopterAvoidanceSimulation.BufferedPanel();
+            this.mainViewPort = new QuadcopterAvoidanceSimulation.BufferedPanel();
             this.SuspendLayout();
-            // 
-            // mainViewPort
-            // 
-            this.mainViewPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mainViewPort.Location = new System.Drawing.Point(12, 12);
-            this.mainViewPort.Name = "mainViewPort";
-            this.mainViewPort.Size = new System.Drawing.Size(664, 478);
-            this.mainViewPort.TabIndex = 0;
-            this.mainViewPort.Paint += new System.Windows.Forms.PaintEventHandler(this.mainViewPort_Paint);
             // 
             // viewPortUpdate
             // 
@@ -81,11 +73,20 @@
             // 
             // lidarSensorViewPort
             // 
-            this.lidarSensorViewPort.Location = new System.Drawing.Point(685, 140);
+            this.lidarSensorViewPort.Location = new System.Drawing.Point(685, 136);
             this.lidarSensorViewPort.Name = "lidarSensorViewPort";
             this.lidarSensorViewPort.Size = new System.Drawing.Size(350, 350);
-            this.lidarSensorViewPort.TabIndex = 1;
-            this.lidarSensorViewPort.Paint += new System.Windows.Forms.PaintEventHandler(this.lidarSensorViewPort_Paint);
+            this.lidarSensorViewPort.TabIndex = 3;
+            this.lidarSensorViewPort.Paint += new System.Windows.Forms.PaintEventHandler(this.lidarSensorViewPort_Paint_1);
+            // 
+            // mainViewPort
+            // 
+            this.mainViewPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mainViewPort.Location = new System.Drawing.Point(12, 12);
+            this.mainViewPort.Name = "mainViewPort";
+            this.mainViewPort.Size = new System.Drawing.Size(660, 474);
+            this.mainViewPort.TabIndex = 2;
+            this.mainViewPort.Paint += new System.Windows.Forms.PaintEventHandler(this.mainViewPort_Paint_1);
             // 
             // Form1
             // 
@@ -93,10 +94,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1046, 506);
             this.Controls.Add(this.lidarSensorViewPort);
+            this.Controls.Add(this.mainViewPort);
             this.Controls.Add(this.labelYaw);
             this.Controls.Add(this.labelRoll);
             this.Controls.Add(this.labelPitch);
-            this.Controls.Add(this.mainViewPort);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -107,12 +108,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel mainViewPort;
         private System.Windows.Forms.Timer viewPortUpdate;
         private System.Windows.Forms.Label labelPitch;
         private System.Windows.Forms.Label labelRoll;
         private System.Windows.Forms.Label labelYaw;
-        private System.Windows.Forms.Panel lidarSensorViewPort;
+        private BufferedPanel mainViewPort;
+        private BufferedPanel lidarSensorViewPort;
     }
 }
 

@@ -29,6 +29,7 @@ namespace QuadcopterAvoidanceSimulation
         public Form1()
         {
             InitializeComponent();
+
             joystick = new Joystick(this.Handle);
             connectToJoystick(joystick);
             joystickUpdateThread = new Thread(new ThreadStart(joystickUpdate));
@@ -46,44 +47,13 @@ namespace QuadcopterAvoidanceSimulation
 
         }
 
-        private void mainViewPort_Paint(object sender, PaintEventArgs e)
-        {
-            Pen blackPen = new Pen(Color.Black, 1);
-            Pen redPen = new Pen(Color.Red, 1);
-            SolidBrush blackBrush = new SolidBrush(Color.Black);
-            Graphics g = e.Graphics;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            for (int i = 0; i < walls.Obstacles.Count; i++)
-            {
-                Obstacle o = (Obstacle)walls.Obstacles[i];
-                g.DrawLine(blackPen, o.p1, o.p2);
-            }
-
-            int x = Convert.ToInt32(mainQuad.xPosition);
-            int y = Convert.ToInt32(mainViewPort.Height - mainQuad.yPosition);
-            int x2 = Convert.ToInt32(x - 20 * mainQuad.quadHeadingVector.X);
-            int y2 = Convert.ToInt32(y - 20 * mainQuad.quadHeadingVector.Y);
-
-            labelPitch.Text = "Pitch: " + Convert.ToString(Equations.toDeg(mainQuad.pitch));
-            labelRoll.Text = "Roll: " + Convert.ToString(Equations.toDeg(mainQuad.roll));
-            labelYaw.Text = "Yaw: " + Convert.ToString(Equations.toDeg(mainQuad.yaw) % 360);
-
-            Point origin = new Point(Convert.ToInt32(LIDAR1.xOrigin) + 2, mainViewPort.Height - Convert.ToInt32(LIDAR1.yOrigin) +2);
-            Point end = new Point(Convert.ToInt32(LIDAR1.xEnd)+2, mainViewPort.Height - Convert.ToInt32(LIDAR1.yEnd)+2);
-
-            g.FillEllipse(blackBrush,x,y,4,4);
-            g.DrawLine(blackPen,x+2,y+2,x2+2,y2+2);
-     
-            g.DrawLine(redPen,origin,end);
-            g.Dispose();
-        }
-
         private void viewPortUpdate_Tick(object sender, EventArgs e)
         {
             joystickUpdate();
             mainQuad.updateState();
             LIDAR1.updateLidar(mainQuad.xPosition, mainQuad.yPosition,mainQuad.yaw);
+            mainViewPort.Invalidate();
+            lidarSensorViewPort.Invalidate();
             mainViewPort.Invalidate();
         }
 
@@ -125,11 +95,45 @@ namespace QuadcopterAvoidanceSimulation
             }
         }
 
-        private void lidarSensorViewPort_Paint(object sender, PaintEventArgs e)
+        private void mainViewPort_Paint_1(object sender, PaintEventArgs e)
+        {
+            Pen blackPen = new Pen(Color.Black, 1);
+            Pen redPen = new Pen(Color.Red, 1);
+            SolidBrush blackBrush = new SolidBrush(Color.Black);
+            Graphics g = e.Graphics;
+
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            for (int i = 0; i < walls.Obstacles.Count; i++)
+            {
+                Obstacle o = (Obstacle)walls.Obstacles[i];
+                g.DrawLine(blackPen, o.p1, o.p2);
+            }
+
+            int x = Convert.ToInt32(mainQuad.xPosition);
+            int y = Convert.ToInt32(mainViewPort.Height - mainQuad.yPosition);
+            int x2 = Convert.ToInt32(x - 20 * mainQuad.quadHeadingVector.X);
+            int y2 = Convert.ToInt32(y - 20 * mainQuad.quadHeadingVector.Y);
+
+            labelPitch.Text = "Pitch: " + Convert.ToString(Equations.toDeg(mainQuad.pitch));
+            labelRoll.Text = "Roll: " + Convert.ToString(Equations.toDeg(mainQuad.roll));
+            labelYaw.Text = "Yaw: " + Convert.ToString(Equations.toDeg(mainQuad.yaw) % 360);
+
+            Point origin = new Point(Convert.ToInt32(LIDAR1.xOrigin) + 2, mainViewPort.Height - Convert.ToInt32(LIDAR1.yOrigin) + 2);
+            Point end = new Point(Convert.ToInt32(LIDAR1.xEnd) + 2, mainViewPort.Height - Convert.ToInt32(LIDAR1.yEnd) + 2);
+
+            g.FillEllipse(blackBrush, x, y, 4, 4);
+            g.DrawLine(blackPen, x + 2, y + 2, x2 + 2, y2 + 2);
+
+            g.DrawLine(redPen, origin, end);
+        }
+
+        private void lidarSensorViewPort_Paint_1(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             Drawing.drawPolarGraph(g, lidarSensorViewPort);
+            Drawing.drawPolarPoint(g, lidarSensorViewPort, 0.5, LIDAR1.angle);
         }
 
     }
