@@ -97,6 +97,11 @@ namespace QuadcopterAvoidanceSimulation
             return deg * 0.01745329251;
         }
 
+        public static double toRad(int deg)
+        {
+            return deg * 0.01745329251;
+        }
+
         public static double map(double input, double fromLow, double fromHigh, double toLow, double toHigh){
             double fRange = fromHigh - fromLow;
             double tRange = toHigh - toLow;

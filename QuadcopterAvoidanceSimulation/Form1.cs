@@ -125,6 +125,13 @@ namespace QuadcopterAvoidanceSimulation
             }
         }
 
+        private void lidarSensorViewPort_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Drawing.drawPolarGraph(g, lidarSensorViewPort);
+        }
+
     }
 
     

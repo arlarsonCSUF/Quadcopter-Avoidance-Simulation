@@ -34,6 +34,7 @@
             this.labelPitch = new System.Windows.Forms.Label();
             this.labelRoll = new System.Windows.Forms.Label();
             this.labelYaw = new System.Windows.Forms.Label();
+            this.lidarSensorViewPort = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // mainViewPort
@@ -78,11 +79,20 @@
             this.labelYaw.TabIndex = 0;
             this.labelYaw.Text = "label1";
             // 
+            // lidarSensorViewPort
+            // 
+            this.lidarSensorViewPort.Location = new System.Drawing.Point(685, 140);
+            this.lidarSensorViewPort.Name = "lidarSensorViewPort";
+            this.lidarSensorViewPort.Size = new System.Drawing.Size(350, 350);
+            this.lidarSensorViewPort.TabIndex = 1;
+            this.lidarSensorViewPort.Paint += new System.Windows.Forms.PaintEventHandler(this.lidarSensorViewPort_Paint);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(876, 581);
+            this.ClientSize = new System.Drawing.Size(1046, 506);
+            this.Controls.Add(this.lidarSensorViewPort);
             this.Controls.Add(this.labelYaw);
             this.Controls.Add(this.labelRoll);
             this.Controls.Add(this.labelPitch);
@@ -102,6 +112,7 @@
         private System.Windows.Forms.Label labelPitch;
         private System.Windows.Forms.Label labelRoll;
         private System.Windows.Forms.Label labelYaw;
+        private System.Windows.Forms.Panel lidarSensorViewPort;
     }
 }
 
