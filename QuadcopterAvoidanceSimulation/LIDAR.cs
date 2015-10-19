@@ -47,6 +47,7 @@ namespace QuadcopterAvoidanceSimulation
         public double yOrigin { get { return _yOrigin; } set { _yOrigin = value; } }
         public double xEnd { get { return _xEnd; } set { _xEnd = value; } }
         public double yEnd { get { return _yEnd; } set { _yEnd = value; } }
+        public double angle { get { return _angle; } }
 
         private Equations.lineSegment _lineSegment;
         private Timer time;
