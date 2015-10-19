@@ -20,7 +20,6 @@ namespace QuadcopterAvoidanceSimulation
             int height = p.Height;
            
             Point center = new Point(width/2,height/2);
-            Console.WriteLine(center.X);
 
             int radius = 0;
             if (width <= height)
@@ -31,6 +30,11 @@ namespace QuadcopterAvoidanceSimulation
 
             g.DrawEllipse(largePen, center.X - radius, center.Y-radius, radius * 2, radius * 2);
             g.DrawEllipse(largePen, center.X - 2, center.Y - 2, 4, 4);
+
+            for (int i = 1; i <= 4; i++)
+            {
+                g.DrawEllipse(smallPen, center.X - i * radius/4, center.Y - i * radius/4, radius * i/2, radius * i/2);  
+            }
 
             for (int i = 0; i < 360; i += 360 / 12) // create radial pattern every 360/12 = 30 degrees 
             {
@@ -59,6 +63,29 @@ namespace QuadcopterAvoidanceSimulation
 
                 g.DrawString(Convert.ToString(i), mainFont, blackBrush, textLocation);
             }
+        }
+        public static void drawPolarPoint(Graphics g, Panel p, double r, double theta)
+        {
+            SolidBrush redBrush = new SolidBrush(Color.Red);
+
+            int width = p.Width;
+            int height = p.Height;
+
+            Point center = new Point(width / 2, height / 2);
+
+            int radius = 0;
+            if (width <= height)
+                radius = width / 2 - 30;
+            else
+                radius = height / 2 - 30;
+
+            int x = Convert.ToInt32(radius * r * Math.Sin(theta));
+            int y = Convert.ToInt32(radius * r * Math.Cos(theta));
+            if (r < 1 & r > 0)
+                g.FillEllipse(redBrush, center.X + x - 2, center.Y - y - 2, 4, 4);
+            else
+                Console.WriteLine("r is out of range");
+
         }
     } 
 }
