@@ -87,18 +87,6 @@ namespace QuadcopterAvoidanceSimulation
             mainViewPort.Invalidate();
         }
 
-        private void enableTimer()
-        {
-            if (this.InvokeRequired)
-            {
-                BeginInvoke(new ThreadStart(delegate()
-                {
-                    //joystickTimer.Enabled = true;
-                }));
-            }
-            //else
-                //joystickTimer.Enabled = true;
-        }
 
         private void connectToJoystick(Joystick joystick)
         {
@@ -109,7 +97,7 @@ namespace QuadcopterAvoidanceSimulation
                 {
                     if (joystick.AcquireJoystick(sticks))
                     {
-                        enableTimer();
+                        Console.WriteLine("Joystick Found");
                         break;
                     }
                 }
@@ -126,18 +114,13 @@ namespace QuadcopterAvoidanceSimulation
                 mainQuad.roll = Equations.toRad(joystick.Xaxis / 2.0);
                 mainQuad.pitch = Equations.toRad(-1*joystick.Yaxis / 2.0);
                 mainQuad.yawRate = Equations.toRad(-1*joystick.Zaxis);
-               //Console.WriteLine(Equations.toDeg(mainQuad.yaw));
+               
                 if(joystickButtons[0] == true)
                     mainQuad.resetQuad();
-                for (int i = 0; i < joystickButtons.Length; i++)
-                {
-                    if (joystickButtons[i] == true)
-                        Console.Write("Button " + i + " Pressed\n");
-                }
             }
             catch
             {
-                //joystickTimer.Enabled = false;
+                Console.WriteLine("Joystick Not Connected");
                 connectToJoystick(joystick);
             }
         }
