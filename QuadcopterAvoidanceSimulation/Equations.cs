@@ -126,5 +126,18 @@ namespace QuadcopterAvoidanceSimulation
         {
             public double x1, y1, x2, y2;
         }
+
+        public class PolarPoint
+        {
+            public PolarPoint(double r, double t)
+            {
+                _radius = r;
+                _theta = t;
+            }
+            public double radius { get { return _radius; } set {_radius = value ;} }
+            public double theta { get { return _theta; } set { _theta = value; } }
+            double _radius;
+            double _theta;
+        }
     }
 }
