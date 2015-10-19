@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Collections;
 
 namespace QuadcopterAvoidanceSimulation
 {
@@ -25,6 +26,12 @@ namespace QuadcopterAvoidanceSimulation
             _lineSegment.y2 = _yEnd;
             _rotationalVelocity = Equations.toRad(360 * RPM / 60);
             previousUpdateTime = time.micros;
+            _dataPoints = new ArrayList();
+            for (int i = 0; i < 255; i++)
+            {
+                Equations.PolarPoint p = new Equations.PolarPoint(0, 0);
+                _dataPoints.Add(p);
+            }
         }
 
         public void updateLidar(double x, double y, double yaw)
@@ -37,7 +44,8 @@ namespace QuadcopterAvoidanceSimulation
             _yOrigin = y;
             _xEnd = _xOrigin + _range * Math.Sin(_angle);
             _yEnd = _yOrigin + _range * Math.Cos(_angle);
-            
+            Equations.PolarPoint p = new Equations.PolarPoint(.5,_angle);
+            _dataPoints.Add(p);
             previousUpdateTime = time.micros;
         }
 
@@ -48,17 +56,17 @@ namespace QuadcopterAvoidanceSimulation
         public double xEnd { get { return _xEnd; } set { _xEnd = value; } }
         public double yEnd { get { return _yEnd; } set { _yEnd = value; } }
         public double angle { get { return _angle; } }
+        public ArrayList dataPoints { get { return _dataPoints;}}
 
         private Equations.lineSegment _lineSegment;
         private Timer time;
         private Int64 previousUpdateTime;
+        private ArrayList _dataPoints;
         private double _xOrigin, _yOrigin;
         private double _range;
         private double _xEnd, _yEnd;
         private double _angle;
         private double _angleoffset;
-        private double _rotationalVelocity; // rad/sec
-
-        
+        private double _rotationalVelocity; // rad/sec  
     }
 }
