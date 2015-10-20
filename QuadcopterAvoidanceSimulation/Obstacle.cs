@@ -15,6 +15,7 @@ namespace QuadcopterAvoidanceSimulation
             _y1 = y1;
             _x2 = x2;
             _y2 = y2;
+            _lineSegment = new Equations.lineSegment(_x1, _y1, _x2, _y2);
         }
 
         public int x1{ get{return _x1;} set{_x1 = value;}}
@@ -23,11 +24,12 @@ namespace QuadcopterAvoidanceSimulation
         public int y2 { get { return _y2; } set { _y2 = value; }}
         public Point p1 { get { return new Point(x1, y1); } }
         public Point p2 { get { return new Point(x2, y2); } }
+        public Equations.lineSegment lineSegment { get { return _lineSegment; } }
         
         private
             int _x1,_y1; //cord. of top left corner
             int _x2,_y2;
-            Point _p1, _p2;
+            Equations.lineSegment _lineSegment;
             
     }
 }

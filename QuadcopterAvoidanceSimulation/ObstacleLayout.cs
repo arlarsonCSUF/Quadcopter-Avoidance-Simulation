@@ -4,17 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Windows.Forms;
 
 namespace QuadcopterAvoidanceSimulation
 {
     class ObstacleLayout
     {
-        public ArrayList Obstacles;
-        public ObstacleLayout()
+       
+        public ObstacleLayout(Panel p)
         {
-            Obstacles = new ArrayList();
-            Obstacles.Add(new Obstacle(0, 100, 100, 100));
-            Obstacles.Add(new Obstacle(100, 100, 100, 300));
+            int height = p.Height;
+            int widht = p.Width;
+            _Obstacles = new ArrayList();
+            _Obstacles.Add(new Obstacle(0,100, 100,100));
+            _Obstacles.Add(new Obstacle(100,100, 100,300));
+            _Obstacles.Add(new Obstacle(300,300,400,400));
         }
+        public ArrayList Obstacles { get {return _Obstacles ;}}
+        private ArrayList _Obstacles;
     }
 }

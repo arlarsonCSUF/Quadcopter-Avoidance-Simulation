@@ -37,15 +37,22 @@ namespace QuadcopterAvoidanceSimulation
             joystickUpdateThread.Start();
 
             time = new Timer(DateTime.Now.Ticks);
-            walls = new ObstacleLayout();   
+            walls = new ObstacleLayout(mainViewPort);   
             mainQuad = new Quad(100, 100,time);
-            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0),60,time);
+            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 60, time, walls.Obstacles);
             
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Equations.lineIntersection LI;
+            Equations.lineSegment LS1 = new Equations.lineSegment(0,0,0,10);
+            Equations.lineSegment LS2 = new Equations.lineSegment(-5,5,5,5);
 
+            LI = Equations.getLineIntersection(LS1, LS2);
+            Console.Write("IS INTERSECT:");
+            Console.Write(LI.isIntersection);
+            Console.WriteLine("\tIntersection Point:" + Convert.ToString(LI.x) + "," + Convert.ToString(LI.y));
         }
 
         private void viewPortUpdate_Tick(object sender, EventArgs e)
@@ -108,7 +115,9 @@ namespace QuadcopterAvoidanceSimulation
             for (int i = 0; i < walls.Obstacles.Count; i++)
             {
                 Obstacle o = (Obstacle)walls.Obstacles[i];
-                g.DrawLine(blackPen, o.p1, o.p2);
+               
+ 
+                g.DrawLine(blackPen,o.x1,mainViewPort.Height-o.y1,o.x2,mainViewPort.Height - o.y2);
             }
 
             int x = Convert.ToInt32(mainQuad.xPosition);

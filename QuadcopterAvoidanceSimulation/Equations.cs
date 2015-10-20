@@ -89,7 +89,7 @@ namespace QuadcopterAvoidanceSimulation
 
         public static double toDeg(double rad)
         {
-            return rad * 57.2957795; 
+            return rad * 57.2957795;
         }
 
         public static double toRad(double deg)
@@ -102,16 +102,17 @@ namespace QuadcopterAvoidanceSimulation
             return deg * 0.01745329251;
         }
 
-        public static double map(double input, double fromLow, double fromHigh, double toLow, double toHigh){
+        public static double map(double input, double fromLow, double fromHigh, double toLow, double toHigh)
+        {
             double fRange = fromHigh - fromLow;
             double tRange = toHigh - toLow;
-            double scale = tRange/fRange;
+            double scale = tRange / fRange;
             return input * scale - toHigh;
         }
 
-        public static Vector dragVector(double cDrag,Vector velocity)
+        public static Vector dragVector(double cDrag, Vector velocity)
         {
-            double magnitudeOfDrag = -1 * cDrag * velocity.LengthSquared/2;
+            double magnitudeOfDrag = -1 * cDrag * velocity.LengthSquared / 2;
             Vector V = new Vector(magnitudeOfDrag * velocity.X, magnitudeOfDrag * velocity.Y);
             return V;
         }
@@ -122,11 +123,6 @@ namespace QuadcopterAvoidanceSimulation
             public Point p;
         }
 
-        public struct lineSegment
-        {
-            public double x1, y1, x2, y2;
-        }
-
         public class PolarPoint
         {
             public PolarPoint(double r, double t)
@@ -134,10 +130,98 @@ namespace QuadcopterAvoidanceSimulation
                 _radius = r;
                 _theta = t;
             }
-            public double radius { get { return _radius; } set {_radius = value ;} }
+            public double radius { get { return _radius; } set { _radius = value; } }
             public double theta { get { return _theta; } set { _theta = value; } }
             double _radius;
             double _theta;
+        }
+
+        public struct lineIntersection
+        {
+            public int isIntersection;
+            public double x, y;
+        }
+
+        public class lineSegment
+        {
+            public lineSegment(double X0, double Y0, double X1, double Y1)
+            {
+                _x0 = X0;
+                _y0 = Y0;
+                _x1 = X1;
+                _y1 = Y1;
+            }
+
+            public void updateLineSegment(double X0, double Y0, double X1, double Y1)
+            {
+                _x0 = X0;
+                _y0 = Y0;
+                _x1 = X1;
+                _y1 = Y1;
+            }
+
+            public double x0 { get { return _x0; } set { _x0 = value; } }
+            public double x1 { get { return _x1; } set { _x1 = value; } }
+            public double y0 { get { return _y0; } set { _y0 = value; } }
+            public double y1 { get { return _y1; } set { _y1 = value; } }
+
+            private double _x0, _x1, _y0, _y1;
+        }
+
+        public static lineIntersection getLineIntersection(lineSegment L1, lineSegment L2)
+        {
+            lineIntersection LI;
+            LI.isIntersection = 0;
+            LI.x = 0;
+            LI.y = 0;
+
+            double p0_x = L1.x0;
+            double p0_y = L1.y0;
+            double p1_x = L1.x1;
+            double p1_y = L1.y1;
+
+            double p2_x = L2.x0;
+            double p2_y = L2.y0;
+            double p3_x = L2.x1;
+            double p3_y = L2.y1;
+
+            double s02_x, s02_y, s10_x, s10_y, s32_x, s32_y, s_numer, t_numer, denom, t;
+            s10_x = p1_x - p0_x;
+            s10_y = p1_y - p0_y;
+            s32_x = p3_x - p2_x;
+            s32_y = p3_y - p2_y;
+
+            denom = s10_x * s32_y - s32_x * s10_y;
+            if (denom == 0)
+                return LI; // Collinear
+            bool denomPositive = denom > 0;
+
+            s02_x = p0_x - p2_x;
+            s02_y = p0_y - p2_y;
+            s_numer = s10_x * s02_y - s10_y * s02_x;
+            if ((s_numer < 0) == denomPositive)
+                return LI; // No collision
+
+            t_numer = s32_x * s02_y - s32_y * s02_x;
+            if ((t_numer < 0) == denomPositive)
+                return LI; // No collision
+
+            if (((s_numer > denom) == denomPositive) || ((t_numer > denom) == denomPositive))
+                return LI; // No collision
+            // Collision detected
+            t = t_numer / denom;
+            
+                LI.x = p0_x + (t * s10_x);
+            
+                LI.y = p0_y + (t * s10_y);
+
+                LI.isIntersection = 1; // there is intersection
+            return LI;
+        }
+
+        public static double distanceFormula(double x0, double y0, double x1, double y1)
+        {
+            return Math.Sqrt(Math.Pow(x1 - x0, 2) + Math.Pow(y1 - y0, 2));
         }
     }
 }
