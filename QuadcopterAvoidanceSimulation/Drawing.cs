@@ -83,9 +83,6 @@ namespace QuadcopterAvoidanceSimulation
             int y = Convert.ToInt32(radius * r * Math.Cos(theta));
             if (r <= 1 & r >= 0)
                 g.FillEllipse(redBrush, center.X + x - 2, center.Y - y - 2, 4, 4);
-            else
-                Console.WriteLine("r is out of range");
-
         }
     } 
 }
