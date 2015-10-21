@@ -44,7 +44,7 @@ namespace QuadcopterAvoidanceSimulation
             _yEnd = _yOrigin + _range * Math.Cos(_angle);
             _lineSegment.updateLineSegment(_xOrigin, _yOrigin, _xEnd, _yEnd);
 
-            double minimumDistance = _range;
+            double minimumDistance = _range + 1;
             if (_Obstacles.Count > 0){
                 for (int i = 0; i < _Obstacles.Count; i++)
                 {
@@ -61,7 +61,7 @@ namespace QuadcopterAvoidanceSimulation
                 }
             }
 
-            Equations.PolarPoint p = new Equations.PolarPoint(minimumDistance/_range,_angle);
+            Equations.PolarPoint p = new Equations.PolarPoint(minimumDistance/_range,_angleoffset);
             _dataPoints.Add(p);
             previousUpdateTime = time.micros;
         }
