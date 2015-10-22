@@ -41,9 +41,10 @@ namespace QuadcopterAvoidanceSimulation
                 int x2 = Convert.ToInt32(center.X + radius * Math.Sin(Equations.toRad(i)));
                 int y2 = Convert.ToInt32(center.Y + radius * Math.Cos(Equations.toRad(i-180)));
                 Point endPoint = new Point(x2,y2);
-                g.DrawLine(smallPen, center, endPoint);
-                PointF textLocation;
-                int xOffset = 0;
+                g.DrawLine(smallPen, center, endPoint); // draw lines
+
+                PointF textLocation; 
+                int xOffset = 0; // this next section find the postion offset for the text. purely for cosmetic purposes
                 if (i == 0 || i == 180)
                     xOffset = 0;
                 else if (i > 0 && i < 180)
@@ -61,27 +62,27 @@ namespace QuadcopterAvoidanceSimulation
                 
                 textLocation = new PointF(x2+xOffset,y2+yOffset +2);
 
-                g.DrawString(Convert.ToString(i), mainFont, blackBrush, textLocation);
+                g.DrawString(Convert.ToString(i), mainFont, blackBrush, textLocation); //draw angle text
             }
         }
         public static void drawPolarPoint(Graphics g, Panel p,Color c, double r, double theta)
         {
             SolidBrush redBrush = new SolidBrush(c);
 
-            int width = p.Width;
+            int width = p.Width; // dimensions of the panel
             int height = p.Height;
 
-            Point center = new Point(width / 2, height / 2);
+            Point center = new Point(width / 2, height / 2); // cemter point of the panel/graph
 
             int radius = 0;
-            if (width <= height)
+            if (width <= height) // radius is smaller dimension - margin pixels
                 radius = width / 2 - 30;
             else
                 radius = height / 2 - 30;
 
-            int x = Convert.ToInt32(radius * r * Math.Sin(theta));
+            int x = Convert.ToInt32(radius * r * Math.Sin(theta)); // polar to cartesian conversion
             int y = Convert.ToInt32(radius * r * Math.Cos(theta));
-            if (r <= 1 & r >= 0)
+            if (r < 1 & r >= 0) // if the data point is within range draw the point
                 g.FillEllipse(redBrush, center.X + x - 2, center.Y - y - 2, 4, 4);
         }
     } 
