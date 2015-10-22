@@ -39,7 +39,7 @@ namespace QuadcopterAvoidanceSimulation
             time = new Timer(DateTime.Now.Ticks);
             walls = new ObstacleLayout(mainViewPort);   
             mainQuad = new Quad(100, 100,time);
-            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 600, time, walls.Obstacles);
+            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 60, time, walls.Obstacles);
             
         }
 
