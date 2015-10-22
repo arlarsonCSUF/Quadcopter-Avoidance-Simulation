@@ -12,6 +12,7 @@ namespace QuadcopterAvoidanceSimulation
     {
         public LIDAR(double x, double y, double range, double angleOffset, double RPM, Timer t, ArrayList Obstacles)
         {
+            _dataArraySize = 60;
             time = t;
             _Obstacles = Obstacles;
             _xOrigin = x;
@@ -21,11 +22,11 @@ namespace QuadcopterAvoidanceSimulation
             _angle = angleOffset;
             _xEnd = _range * Math.Sin(_angle);
             _yEnd = _range * Math.Cos(_angle);
-            _lineSegment = new Equations.lineSegment(_xOrigin,_yOrigin,_xEnd,_yEnd);
-            _rotationalVelocity = Equations.toRad(360 * RPM / 60);
+            _lineSegment = new Equations.lineSegment(_xOrigin,_yOrigin,_xEnd,_yEnd); // line segment representing lidar beam 
+            _rotationalVelocity = Equations.toRad(360 * RPM / 60); // RPM to radians/sec
             previousUpdateTime = time.micros;
             _dataPoints = new ArrayList();
-            for (int i = 0; i < 255; i++)
+            for (int i = 0; i < _dataArraySize; i++)
             {
                 Equations.PolarPoint p = new Equations.PolarPoint(0, 0);
                 _dataPoints.Add(p);
@@ -36,34 +37,33 @@ namespace QuadcopterAvoidanceSimulation
         {
             Int64 dT = time.micros - previousUpdateTime; // in us
             
-            _angleoffset += _rotationalVelocity * (dT / 1000000.0);
+            _angleoffset += _rotationalVelocity * (dT / 1000000.0); // theta = dTheta * dt
             _angle = _angleoffset - yaw;
             _xOrigin = x;
             _yOrigin = y;
             _xEnd = _xOrigin + _range * Math.Sin(_angle);
             _yEnd = _yOrigin + _range * Math.Cos(_angle);
-            _lineSegment.updateLineSegment(_xOrigin, _yOrigin, _xEnd, _yEnd);
+            _lineSegment.updateLineSegment(_xOrigin, _yOrigin, _xEnd, _yEnd); //  update line segment representing lidar beam
 
-            double minimumDistance = _range + 1;
-            if (_Obstacles.Count > 0){
+            double minimumDistance = _range; 
+            if (_Obstacles.Count > 0){ // loop through all the obstacles look for intersection and see which intesection is closest
                 for (int i = 0; i < _Obstacles.Count; i++)
                 {
                     Obstacle obs = (Obstacle) _Obstacles[i];
-                    Equations.lineSegment obsLineSegment = obs.lineSegment;
-                    Equations.lineIntersection LI = Equations.getLineIntersection(_lineSegment, obsLineSegment);
-                    if (LI.isIntersection == 1)
+                    Equations.lineSegment obsLineSegment = obs.lineSegment; 
+                    Equations.lineIntersection LI = Equations.getLineIntersection(_lineSegment, obsLineSegment); // find intersection between the lidar beam and obstacle
+                    if (LI.isIntersection == 1) // if there is an intersection
                     {
-                        double distance = Equations.distanceFormula(_xOrigin, _yOrigin, LI.x, LI.y);
-                        Console.WriteLine(distance);
-                        if (distance < minimumDistance)
+                        double distance = Equations.distanceFormula(_xOrigin, _yOrigin, LI.x, LI.y); //find distance from quad to intersection using distance formula
+                        if (distance < minimumDistance) // find the minimum distance of intersection
                             minimumDistance = distance;
                     } 
                 }
             }
 
-            Equations.PolarPoint p = new Equations.PolarPoint(minimumDistance/_range,_angleoffset);
+            Equations.PolarPoint p = new Equations.PolarPoint(minimumDistance/_range,_angleoffset); //add point to polar data array
             _dataPoints.Add(p);
-            previousUpdateTime = time.micros;
+            previousUpdateTime = time.micros; //record time so we can determine dT next update
         }
         
 
@@ -76,6 +76,7 @@ namespace QuadcopterAvoidanceSimulation
         public double angle { get { return _angle; } }
         public ArrayList dataPoints { get { return _dataPoints;}}
         public Equations.lineSegment lineSegment { get { return _lineSegment; } }
+        public int dataArraySize { get { return _dataArraySize; } }
 
         private Equations.lineSegment _lineSegment;
         private ArrayList _Obstacles;
@@ -88,5 +89,6 @@ namespace QuadcopterAvoidanceSimulation
         private double _angle;
         private double _angleoffset;
         private double _rotationalVelocity; // rad/sec  
+        private int _dataArraySize;
     }
 }
