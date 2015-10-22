@@ -39,20 +39,12 @@ namespace QuadcopterAvoidanceSimulation
             time = new Timer(DateTime.Now.Ticks);
             walls = new ObstacleLayout(mainViewPort);   
             mainQuad = new Quad(100, 100,time);
-            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 60, time, walls.Obstacles);
+            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 600, time, walls.Obstacles);
             
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Equations.lineIntersection LI;
-            Equations.lineSegment LS1 = new Equations.lineSegment(0,0,0,10);
-            Equations.lineSegment LS2 = new Equations.lineSegment(-5,5,5,5);
-
-            LI = Equations.getLineIntersection(LS1, LS2);
-            Console.Write("IS INTERSECT:");
-            Console.Write(LI.isIntersection);
-            Console.WriteLine("\tIntersection Point:" + Convert.ToString(LI.x) + "," + Convert.ToString(LI.y));
         }
 
         private void viewPortUpdate_Tick(object sender, EventArgs e)
@@ -89,9 +81,9 @@ namespace QuadcopterAvoidanceSimulation
                 joystick.UpdateStatus();
                 joystickButtons = joystick.buttons;
 
-                mainQuad.roll = Equations.toRad(joystick.Xaxis / 2.0);
-                mainQuad.pitch = Equations.toRad(-1*joystick.Yaxis / 2.0);
-                mainQuad.yawRate = Equations.toRad(-1*joystick.Zaxis);
+                mainQuad.rollInput = Equations.toRad(joystick.Xaxis / 2.0);
+                mainQuad.pitchInput = Equations.toRad(-1*joystick.Yaxis / 2.0);
+                mainQuad.yawInput = Equations.toRad(-1*joystick.Zaxis);
                
                 if(joystickButtons[0] == true)
                     mainQuad.resetQuad();
@@ -157,10 +149,7 @@ namespace QuadcopterAvoidanceSimulation
                 if(LIDAR1.dataPoints.Count > 255)
                     LIDAR1.dataPoints.RemoveAt(0);
             }
-            
-            //Console.WriteLine(LIDAR1.dataPoints.Count);
-            Drawing.drawPolarGraph(g, lidarSensorViewPort);   
-           
+            Drawing.drawPolarGraph(g, lidarSensorViewPort);       
         }
 
     }

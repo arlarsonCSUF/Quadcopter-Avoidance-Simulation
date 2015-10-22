@@ -39,6 +39,9 @@ namespace QuadcopterAvoidanceSimulation
         public double yaw { get { return yawAngle; } set { yawAngle = value; } }
         public double yawRate { get { return wYaw; } set { wYaw = value; } }
         public Vector quadHeadingVector { get { return quadHeading; }}
+        public double pitchInput { get { return _pitchInput; } set { _pitchInput = value; } }
+        public double rollInput { get { return _rollInput; } set { _rollInput = value; } }
+        public double yawInput { get { return _yawInput; } set { _yawInput = value; } }
 
 
         public void updateState(){
@@ -47,6 +50,10 @@ namespace QuadcopterAvoidanceSimulation
 
             double dT = (time.micros - previousUpdateTime) / 1000000.0; //dT in seconds
 
+            pitchAngle = _pitchInput;
+            rollAngle = _rollInput;
+            wYaw = _yawInput;
+            
             pitchAngle += wPitch * dT;
             rollAngle += wRoll * dT;
             yawAngle += wYaw * dT;
@@ -97,6 +104,7 @@ namespace QuadcopterAvoidanceSimulation
         private double thrustAcceleration;
         private double coeffiecientOfDrag;
         private double wPitch, wRoll,wYaw;
+        private double _pitchInput, _rollInput, _yawInput;
         private Vector velocity;
         private Vector acceleration;
         private Vector accelerationRelativeToQuad;
