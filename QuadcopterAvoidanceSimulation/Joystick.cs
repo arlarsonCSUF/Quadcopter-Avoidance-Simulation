@@ -114,9 +114,9 @@ namespace QuadcopterAvoidanceSimulation
 
             int[] extraAxis = state.GetSlider();
 
-            Xaxis = Equations.map(state.X - calX, 0, 65536, -100, 100);
-            Yaxis = Equations.map(state.Y - calY,0,65536,-100,100);
-            Zaxis = Equations.map(state.Rz - calZ, 0, 65536, -100, 100);
+            Xaxis = Equations.map(state.X, 0, 65535, -100, 100);
+            Yaxis = Equations.map(state.Y, 0, 65535, -100, 100);
+            Zaxis = Equations.map(state.Rz, 0, 65535, -100, 100);
             
             byte[] jsButtons = state.GetButtons();
             buttons = new bool[jsButtons.Length];
