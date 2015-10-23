@@ -30,7 +30,7 @@ namespace QuadcopterAvoidanceSimulation
             _dataPoints = new ArrayList();
             for (int i = 0; i < _dataArraySize; i++)
             {
-                Equations.PolarPoint p = new Equations.PolarPoint(0, 0);
+                Equations.PolarPoint p = new Equations.PolarPoint(1,i*Equations.toRad(360)/_dataArraySize);
                 _dataPoints.Add(p);
             }
         }
@@ -89,6 +89,7 @@ namespace QuadcopterAvoidanceSimulation
         public double xEnd { get { return _xEnd; } set { _xEnd = value; } }
         public double yEnd { get { return _yEnd; } set { _yEnd = value; } }
         public double angle { get { return _angle; } }
+        public double range { get { return _range; } set { _range = value; } }
         public ArrayList dataPoints { get { return _dataPoints;}}
         public Equations.lineSegment lineSegment { get { return _lineSegment; } }
         public int dataArraySize { get { return _dataArraySize; } }

@@ -27,6 +27,7 @@ namespace QuadcopterAvoidanceSimulation
             velocity = new Vector(0,0);
             acceleration = new Vector(0,0);
             accelerationRelativeToQuad = new Vector(0,0);
+            _avoidanceInputVector = new Vector(0, 0);
             time = t;
             previousUpdateTime = time.micros;
         }
@@ -42,6 +43,7 @@ namespace QuadcopterAvoidanceSimulation
         public double pitchInput { get { return _pitchInput; } set { _pitchInput = value; } }
         public double rollInput { get { return _rollInput; } set { _rollInput = value; } }
         public double yawInput { get { return _yawInput; } set { _yawInput = value; } }
+        public Vector avoidanceInputVector { get { return _avoidanceInputVector; } set { _avoidanceInputVector = value; } }
 
 
         public void updateState(){
@@ -53,6 +55,9 @@ namespace QuadcopterAvoidanceSimulation
             pitchAngle = _pitchInput;
             rollAngle = _rollInput;
             wYaw = _yawInput;
+
+            pitchAngle +=  Math.Asin(_avoidanceInputVector.Y / thrustAcceleration);
+            rollAngle += Math.Sin(_avoidanceInputVector.X / thrustAcceleration);
             
             pitchAngle += wPitch * dT;
             rollAngle += wRoll * dT;
@@ -81,8 +86,8 @@ namespace QuadcopterAvoidanceSimulation
         {
             while (updateInProgress) { }// wait until update is not in progress
             updateInProgress = true;
-            _xPosition = 100;
-            _yPosition = 100;
+            _xPosition = 200;
+            _yPosition = 200;
             thrustAcceleration = 100;
             coeffiecientOfDrag = 0.0001;
             pitchAngle = Equations.toRad(0);
@@ -112,5 +117,6 @@ namespace QuadcopterAvoidanceSimulation
         private Vector quadHeading;
         private Timer time;
         private Int64 previousUpdateTime;
+        private Vector _avoidanceInputVector;
     }
 }

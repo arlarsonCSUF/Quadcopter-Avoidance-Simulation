@@ -22,6 +22,7 @@ namespace QuadcopterAvoidanceSimulation
         Timer time;
         Quad mainQuad;
         LIDAR LIDAR1;
+        Avoidance AvoidanceAlgorithm;
         private Joystick joystick;
         private bool[] joystickButtons;
         private Thread joystickUpdateThread;
@@ -38,9 +39,9 @@ namespace QuadcopterAvoidanceSimulation
 
             time = new Timer(DateTime.Now.Ticks);
             walls = new ObstacleLayout(mainViewPort);   
-            mainQuad = new Quad(100, 100,time);
+            mainQuad = new Quad(200, 200,time);
             LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 600, time, walls.Obstacles);
-            
+            AvoidanceAlgorithm = new Avoidance(LIDAR1,100,10);    
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -52,9 +53,11 @@ namespace QuadcopterAvoidanceSimulation
             joystickUpdate();
             mainQuad.updateState();
             LIDAR1.updateLidar(mainQuad.xPosition, mainQuad.yPosition,mainQuad.yaw);
+            System.Windows.Vector v = AvoidanceAlgorithm.findAvoidanceForceVector();
+            mainQuad.avoidanceInputVector = v;
+            Console.WriteLine("X:" + Convert.ToString(v.X) + "\tY:" + Convert.ToString(v.Y));
             mainViewPort.Invalidate();
             lidarSensorViewPort.Invalidate();
-            mainViewPort.Invalidate();
         }
 
 
