@@ -39,7 +39,7 @@ namespace QuadcopterAvoidanceSimulation
             time = new Timer(DateTime.Now.Ticks);
             walls = new ObstacleLayout(mainViewPort);   
             mainQuad = new Quad(100, 100,time);
-            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 60, time, walls.Obstacles);
+            LIDAR1 = new LIDAR(100, 100, 200, Equations.toRad(0), 600, time, walls.Obstacles);
             
         }
 
@@ -141,12 +141,14 @@ namespace QuadcopterAvoidanceSimulation
                     Equations.PolarPoint p = (Equations.PolarPoint)LIDAR1.dataPoints[i];
                     double angle = p.theta;
                     double r = p.radius;
-                    double hue = i/4.0;
+                    //Console.WriteLine(i/Convert.ToDouble(LIDAR1.dataArraySize));
+                    double hue = Equations.map(i/Convert.ToDouble(LIDAR1.dataArraySize),0,1,0,100);
                     HSLColor c = new HSLColor(hue,255,100);
                     
                     Drawing.drawPolarPoint(g,lidarSensorViewPort,c,r,angle);
                 }
-                if(LIDAR1.dataPoints.Count > 255)
+                if(LIDAR1.dataPoints.Count > LIDAR1.dataArraySize)
+                    while (LIDAR1.dataPoints.Count > LIDAR1.dataArraySize)
                     LIDAR1.dataPoints.RemoveAt(0);
             }
             Drawing.drawPolarGraph(g, lidarSensorViewPort);       
