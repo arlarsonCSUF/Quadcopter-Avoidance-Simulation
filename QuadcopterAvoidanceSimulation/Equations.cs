@@ -104,10 +104,7 @@ namespace QuadcopterAvoidanceSimulation
 
         public static double map(double input, double fromLow, double fromHigh, double toLow, double toHigh)
         {
-            double fRange = fromHigh - fromLow;
-            double tRange = toHigh - toLow;
-            double scale = tRange / fRange;
-            return input * scale - toHigh;
+            return (input - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
         }
 
         public static Vector dragVector(double cDrag, Vector velocity)
