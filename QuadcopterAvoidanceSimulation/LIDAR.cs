@@ -12,7 +12,9 @@ namespace QuadcopterAvoidanceSimulation
     {
         public LIDAR(double x, double y, double range, double angleOffset, double RPM, Timer t, ArrayList Obstacles)
         {
-            _dataArraySize = 60;
+            _dataArraySize = 1024;
+            _numberOfSamplePerRevolution = 60;
+            _sampleAngle = Equations.toRad(360/(double)_numberOfSamplePerRevolution);
             time = t;
             _Obstacles = Obstacles;
             _xOrigin = x;
@@ -37,32 +39,45 @@ namespace QuadcopterAvoidanceSimulation
         {
             Int64 dT = time.micros - previousUpdateTime; // in us
             
-            _angleoffset += _rotationalVelocity * (dT / 1000000.0); // theta = dTheta * dt
-            _angle = _angleoffset - yaw;
+            double dTheta =  _rotationalVelocity * (dT / 1000000.0); // dTheta = w * dt
+            
+            int start = Convert.ToInt32(Math.Ceiling(_angleoffset /_sampleAngle));
+            int max = Convert.ToInt32(Math.Floor((_angleoffset + dTheta)/_sampleAngle));
+
             _xOrigin = x;
             _yOrigin = y;
-            _xEnd = _xOrigin + _range * Math.Sin(_angle);
-            _yEnd = _yOrigin + _range * Math.Cos(_angle);
-            _lineSegment.updateLineSegment(_xOrigin, _yOrigin, _xEnd, _yEnd); //  update line segment representing lidar beam
 
-            double minimumDistance = _range; 
-            if (_Obstacles.Count > 0){ // loop through all the obstacles look for intersection and see which intesection is closest
-                for (int i = 0; i < _Obstacles.Count; i++)
-                {
-                    Obstacle obs = (Obstacle) _Obstacles[i];
-                    Equations.lineSegment obsLineSegment = obs.lineSegment; 
-                    Equations.lineIntersection LI = Equations.getLineIntersection(_lineSegment, obsLineSegment); // find intersection between the lidar beam and obstacle
-                    if (LI.isIntersection == 1) // if there is an intersection
+            for (int i = start; i <= max; i++)
+            {
+                _angle = _angleoffset - yaw + _sampleAngle*i;
+                _xEnd = _xOrigin + _range * Math.Sin(_angle);
+                _yEnd = _yOrigin + _range * Math.Cos(_angle);
+                _lineSegment.updateLineSegment(_xOrigin, _yOrigin, _xEnd, _yEnd); //  update line segment representing lidar beam
+
+                double minimumDistance = _range;
+                if (_Obstacles.Count > 0)
+                { // loop through all the obstacles look for intersection and see which intesection is closest
+                    for (int j = 0; j < _Obstacles.Count; j++)
                     {
-                        double distance = Equations.distanceFormula(_xOrigin, _yOrigin, LI.x, LI.y); //find distance from quad to intersection using distance formula
-                        if (distance < minimumDistance) // find the minimum distance of intersection
-                            minimumDistance = distance;
-                    } 
+                        Obstacle obs = (Obstacle)_Obstacles[j];
+                        Equations.lineSegment obsLineSegment = obs.lineSegment;
+                        Equations.lineIntersection LI = Equations.getLineIntersection(_lineSegment, obsLineSegment); // find intersection between the lidar beam and obstacle
+                        if (LI.isIntersection == 1) // if there is an intersection
+                        {
+                            double distance = Equations.distanceFormula(_xOrigin, _yOrigin, LI.x, LI.y); //find distance from quad to intersection using distance formula
+                            if (distance < minimumDistance) // find the minimum distance of intersection
+                                minimumDistance = distance;
+                        }
+                    }
                 }
-            }
 
-            Equations.PolarPoint p = new Equations.PolarPoint(minimumDistance/_range,_angleoffset); //add point to polar data array
-            _dataPoints.Add(p);
+                Equations.PolarPoint p = new Equations.PolarPoint(minimumDistance / _range, _angleoffset + _sampleAngle * i); //add point to polar data array
+                _dataPoints.Add(p);
+                
+            }
+            _angleoffset += dTheta;
+            
+            
             previousUpdateTime = time.micros; //record time so we can determine dT next update
         }
         
@@ -90,5 +105,7 @@ namespace QuadcopterAvoidanceSimulation
         private double _angleoffset;
         private double _rotationalVelocity; // rad/sec  
         private int _dataArraySize;
+        private int _numberOfSamplePerRevolution;
+        private double _sampleAngle;
     }
 }
