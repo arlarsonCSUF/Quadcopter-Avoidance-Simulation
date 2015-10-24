@@ -27,10 +27,19 @@ namespace QuadcopterAvoidanceSimulation
             _lineSegment = new Equations.lineSegment(_xOrigin,_yOrigin,_xEnd,_yEnd); // line segment representing lidar beam 
             _rotationalVelocity = Equations.toRad(360 * RPM / 60); // RPM to radians/sec
             previousUpdateTime = time.micros;
-            _dataPoints = new ArrayList();
+
+            _dataPointsForDisplay = new ArrayList(); // this array is used for holding data points to display to graph
+            _dataPoints = new ArrayList(); // this holds data from the last lidar rotation only this is what we do our calculations with
+
             for (int i = 0; i < _dataArraySize; i++)
             {
                 Equations.PolarPoint p = new Equations.PolarPoint(1,i*Equations.toRad(360)/_dataArraySize);
+                _dataPointsForDisplay.Add(p);
+            }
+
+            for (int i = 0; i < _numberOfSamplePerRevolution; i++)
+            {
+                Equations.PolarPoint p = new Equations.PolarPoint(1, i * Equations.toRad(360) / _dataArraySize);
                 _dataPoints.Add(p);
             }
         }
@@ -72,7 +81,10 @@ namespace QuadcopterAvoidanceSimulation
                 }
 
                 Equations.PolarPoint p = new Equations.PolarPoint(minimumDistance / _range, _angleoffset + _sampleAngle * i); //add point to polar data array
+                _dataPointsForDisplay.Add(p);
                 _dataPoints.Add(p);
+                if (_dataPoints.Count > _numberOfSamplePerRevolution)
+                    _dataPoints.RemoveAt(0);
                 
             }
             _angleoffset += dTheta;
@@ -91,6 +103,7 @@ namespace QuadcopterAvoidanceSimulation
         public double angle { get { return _angle; } }
         public double range { get { return _range; } set { _range = value; } }
         public ArrayList dataPoints { get { return _dataPoints;}}
+        public ArrayList dataPointsForDisplay{get{ return _dataPointsForDisplay;}}
         public Equations.lineSegment lineSegment { get { return _lineSegment; } }
         public int dataArraySize { get { return _dataArraySize; } }
 
@@ -99,6 +112,7 @@ namespace QuadcopterAvoidanceSimulation
         private Timer time;
         private Int64 previousUpdateTime;
         private ArrayList _dataPoints;
+        private ArrayList _dataPointsForDisplay;
         private double _xOrigin, _yOrigin;
         private double _range;
         private double _xEnd, _yEnd;

@@ -137,11 +137,11 @@ namespace QuadcopterAvoidanceSimulation
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            if (LIDAR1.dataPoints.Count > 0)
+            if (LIDAR1.dataPointsForDisplay.Count > 0)
             {
-                for (int i = 0; i < LIDAR1.dataPoints.Count; i++)
+                for (int i = 0; i < LIDAR1.dataPointsForDisplay.Count; i++)
                 {
-                    Equations.PolarPoint p = (Equations.PolarPoint)LIDAR1.dataPoints[i];
+                    Equations.PolarPoint p = (Equations.PolarPoint)LIDAR1.dataPointsForDisplay[i];
                     double angle = p.theta;
                     double r = p.radius;
                     //Console.WriteLine(i/Convert.ToDouble(LIDAR1.dataArraySize));
@@ -150,9 +150,9 @@ namespace QuadcopterAvoidanceSimulation
                     
                     Drawing.drawPolarPoint(g,lidarSensorViewPort,c,r,angle);
                 }
-                if(LIDAR1.dataPoints.Count > LIDAR1.dataArraySize)
-                    while (LIDAR1.dataPoints.Count > LIDAR1.dataArraySize)
-                    LIDAR1.dataPoints.RemoveAt(0);
+                if(LIDAR1.dataPointsForDisplay.Count > LIDAR1.dataArraySize)
+                    while (LIDAR1.dataPointsForDisplay.Count > LIDAR1.dataArraySize)
+                    LIDAR1.dataPointsForDisplay.RemoveAt(0);
             }
             Drawing.drawPolarGraph(g, lidarSensorViewPort);       
         }
