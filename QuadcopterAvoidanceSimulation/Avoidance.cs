@@ -29,7 +29,8 @@ namespace QuadcopterAvoidanceSimulation
 
                     double scaledRadius = _clampAvoidanceMagnitude;
                     if (p.radius != 0) // avoid extremely unlikely case of division by zero
-                        scaledRadius = _avoidanceGain / (p.radius * _LIDAR.range); //the magnitude of the avoidance vector is inversely proportional to the object distance
+                        scaledRadius = -1 * _clampAvoidanceMagnitude * p.radius * _LIDAR.range/_avoidanceThreshold + _clampAvoidanceMagnitude;
+                        //scaledRadius = _avoidanceGain / (p.radius * _LIDAR.range); //the magnitude of the avoidance vector is inversely proportional to the object distance
                     if (scaledRadius > _clampAvoidanceMagnitude)
                         scaledRadius = _clampAvoidanceMagnitude;
 
@@ -49,7 +50,7 @@ namespace QuadcopterAvoidanceSimulation
             for (int i = 0; i < a.Count; i++)
             {
                 Vector v = (Vector)a[i];
-                Vector.Divide(v,a.Count);
+                v = Vector.Divide(v,a.Count);
                 avoidanceForceVector = Vector.Add(avoidanceForceVector, v);
             }
             if (avoidanceForceVector.Length > _clampAvoidanceMagnitude)
