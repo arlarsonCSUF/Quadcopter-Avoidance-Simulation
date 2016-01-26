@@ -28,6 +28,7 @@ namespace QuadcopterAvoidanceSimulation
             acceleration = new Vector(0,0);
             accelerationRelativeToQuad = new Vector(0,0);
             _avoidanceInputVector = new Vector(0, 0);
+            _weightedAvoidanceVector = new Vector(0, 0);
             time = t;
             previousUpdateTime = time.micros;
         }
@@ -55,9 +56,19 @@ namespace QuadcopterAvoidanceSimulation
             pitchAngle = _pitchInput;
             rollAngle = _rollInput;
             wYaw = _yawInput;
+            double scalar = -1 * Equations.vectorProjection(velocity,_avoidanceInputVector)/20;
+            if (scalar < 0)
+                scalar = 0;
+            if (scalar > 1)
+                scalar = 1;
+            //Vector invertedAvoidanceVector = new Vector(-1 * _avoidanceInputVector.X, -1 * _avoidanceInputVector.Y);
+            //double scalar = Math.Cos(Vector.AngleBetween(_avoidanceInputVector,velocity));
+            Console.WriteLine(scalar);
+ 
+            _weightedAvoidanceVector = new Vector(_avoidanceInputVector.X * scalar, _avoidanceInputVector.Y * scalar);
 
-            pitchAngle +=  Math.Asin(_avoidanceInputVector.Y / thrustAcceleration);
-            rollAngle += Math.Sin(_avoidanceInputVector.X / thrustAcceleration);
+            pitchAngle +=  Math.Asin(_weightedAvoidanceVector.Y / thrustAcceleration);
+            rollAngle += Math.Asin(_weightedAvoidanceVector.X / thrustAcceleration);
             
             pitchAngle += wPitch * dT;
             rollAngle += wRoll * dT;
@@ -73,6 +84,7 @@ namespace QuadcopterAvoidanceSimulation
            Vector netAcceleration = Vector.Add(acceleration, dragForce);
          
             _xPosition = Equations.kinematics3(_xPosition, velocity.X, acceleration.X, dT);
+                
             _yPosition = Equations.kinematics3(_yPosition, velocity.Y, acceleration.Y, dT);
 
             velocity.X = Equations.kinematics1(velocity.X, netAcceleration.X, dT);
@@ -118,5 +130,6 @@ namespace QuadcopterAvoidanceSimulation
         private Timer time;
         private Int64 previousUpdateTime;
         private Vector _avoidanceInputVector;
+        private Vector _weightedAvoidanceVector;
     }
 }

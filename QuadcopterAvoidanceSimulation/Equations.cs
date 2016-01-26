@@ -78,7 +78,10 @@ namespace QuadcopterAvoidanceSimulation
         /// <returns></returns>
         public static double vectorProjection(Vector a, Vector b)
         {
-            return dotProduct(a, b) / b.Length;
+            if (b.Length != 0)
+                return dotProduct(a, b) / b.Length;
+            else
+                return 0;
         }
 
         public static Vector orthagonalVector(Vector a)

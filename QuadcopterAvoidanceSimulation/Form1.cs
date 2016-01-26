@@ -55,7 +55,7 @@ namespace QuadcopterAvoidanceSimulation
             LIDAR1.updateLidar(mainQuad.xPosition, mainQuad.yPosition,mainQuad.yaw);
             System.Windows.Vector v = AvoidanceAlgorithm.findAvoidanceForceVector();
             mainQuad.avoidanceInputVector = v;
-            Console.WriteLine("X:" + Convert.ToString(v.X) + "\tY:" + Convert.ToString(v.Y));
+            //Console.WriteLine("X:" + Convert.ToString(v.X) + "\tY:" + Convert.ToString(v.Y));
             mainViewPort.Invalidate();
             lidarSensorViewPort.Invalidate();
         }
@@ -102,6 +102,7 @@ namespace QuadcopterAvoidanceSimulation
         {
             Pen blackPen = new Pen(Color.Black, 1);
             Pen redPen = new Pen(Color.Red, 1);
+            Pen greenPen = new Pen(Color.Green, 1);
             SolidBrush blackBrush = new SolidBrush(Color.Black);
             Graphics g = e.Graphics;
 
@@ -114,7 +115,7 @@ namespace QuadcopterAvoidanceSimulation
  
                 g.DrawLine(blackPen,o.x1,mainViewPort.Height-o.y1,o.x2,mainViewPort.Height - o.y2);
             }
-
+            
             int x = Convert.ToInt32(mainQuad.xPosition);
             int y = Convert.ToInt32(mainViewPort.Height - mainQuad.yPosition);
             int x2 = Convert.ToInt32(x - 20 * mainQuad.quadHeadingVector.X);
@@ -124,13 +125,18 @@ namespace QuadcopterAvoidanceSimulation
             labelRoll.Text = "Roll: " + Convert.ToString(Equations.toDeg(mainQuad.roll));
             labelYaw.Text = "Yaw: " + Convert.ToString(Equations.toDeg(mainQuad.yaw) % 360);
 
+            //LIDAR Vector
             Point origin = new Point(Convert.ToInt32(LIDAR1.xOrigin) + 2, mainViewPort.Height - Convert.ToInt32(LIDAR1.yOrigin) + 2);
             Point end = new Point(Convert.ToInt32(LIDAR1.xEnd) + 2, mainViewPort.Height - Convert.ToInt32(LIDAR1.yEnd) + 2);
 
+            //Avoidance Vector
+            Point originAvoidance = new Point(Convert.ToInt32(mainQuad.xPosition), mainViewPort.Height - Convert.ToInt32(mainQuad.yPosition));
+            Point endAvoidance = new Point(Convert.ToInt32(mainQuad.avoidanceInputVector.X + mainQuad.xPosition), mainViewPort.Height - Convert.ToInt32(mainQuad.avoidanceInputVector.Y + mainQuad.yPosition));
+            
             g.FillEllipse(blackBrush, x, y, 4, 4);
             g.DrawLine(blackPen, x + 2, y + 2, x2 + 2, y2 + 2);
-
             g.DrawLine(redPen, origin, end);
+            g.DrawLine(greenPen, originAvoidance, endAvoidance);
         }
 
         private void lidarSensorViewPort_Paint_1(object sender, PaintEventArgs e)

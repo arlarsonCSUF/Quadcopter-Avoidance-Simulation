@@ -93,6 +93,7 @@ namespace QuadcopterAvoidanceSimulation
         public ArrayList dataPoints { get { return _dataPoints;}}
         public Equations.lineSegment lineSegment { get { return _lineSegment; } }
         public int dataArraySize { get { return _dataArraySize; } }
+        public int samplesPerRevolution { get { return _numberOfSamplePerRevolution; } }
 
         private Equations.lineSegment _lineSegment;
         private ArrayList _Obstacles;

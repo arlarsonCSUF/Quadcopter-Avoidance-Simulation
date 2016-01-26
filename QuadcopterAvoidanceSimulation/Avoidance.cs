@@ -14,6 +14,7 @@ namespace QuadcopterAvoidanceSimulation
         {
             _LIDAR = lidar;
             data = lidar.dataPoints;
+            _numberOfDataPointsPerRevolution = lidar.samplesPerRevolution;
             _avoidanceThreshold = avoidanceThreshold;
             _avoidanceGain = avoidanceGain;
             _clampAvoidanceMagnitude = 100;
@@ -21,7 +22,7 @@ namespace QuadcopterAvoidanceSimulation
 
         public ArrayList generateVectorArray(){
             ArrayList a = new ArrayList();
-            for (int i = 0; i < data.Count; i++)
+            for (int i = data.Count - _numberOfDataPointsPerRevolution; i < data.Count; i++)
             {
                 Equations.PolarPoint p = (Equations.PolarPoint)data[i];
                 if ((p.radius * _LIDAR.range) <= _avoidanceThreshold)
@@ -29,7 +30,8 @@ namespace QuadcopterAvoidanceSimulation
 
                     double scaledRadius = _clampAvoidanceMagnitude;
                     if (p.radius != 0) // avoid extremely unlikely case of division by zero
-                        scaledRadius = _avoidanceGain / (p.radius * _LIDAR.range); //the magnitude of the avoidance vector is inversely proportional to the object distance
+                        scaledRadius = -1 * _clampAvoidanceMagnitude * _LIDAR.range/_avoidanceThreshold * p.radius + _clampAvoidanceMagnitude;
+                        //scaledRadius = _avoidanceGain *100 / (p.radius * _LIDAR.range); //the magnitude of the avoidance vector is inversely proportional to the object distance
                     if (scaledRadius > _clampAvoidanceMagnitude)
                         scaledRadius = _clampAvoidanceMagnitude;
 
@@ -49,23 +51,32 @@ namespace QuadcopterAvoidanceSimulation
             for (int i = 0; i < a.Count; i++)
             {
                 Vector v = (Vector)a[i];
-                Vector.Divide(v,a.Count);
                 avoidanceForceVector = Vector.Add(avoidanceForceVector, v);
             }
+            if(a.Count != 0)
+                avoidanceForceVector = Vector.Divide(avoidanceForceVector, a.Count);
+
             if (avoidanceForceVector.Length > _clampAvoidanceMagnitude)
             {
                 double divisionFactor = avoidanceForceVector.Length / _clampAvoidanceMagnitude;
                 avoidanceForceVector =  Vector.Divide(avoidanceForceVector, divisionFactor);
             }
 
-            return avoidanceForceVector;
+            Vector scaledDifference = new Vector(LPF_Beta * (smoothAvoidanceVector.X - avoidanceForceVector.X), LPF_Beta * (smoothAvoidanceVector.Y - avoidanceForceVector.Y));
+            smoothAvoidanceVector = Vector.Subtract(smoothAvoidanceVector, scaledDifference);
+            return smoothAvoidanceVector;
 
         }
+
+        private Vector smoothAvoidanceVector;
+        private double LPF_Beta = 0.5; // 0<ß<1
+
         private LIDAR _LIDAR;
         private ArrayList data;
         private double _avoidanceThreshold;
         private double _avoidanceGain;
         private double _clampAvoidanceMagnitude;
+        private int _numberOfDataPointsPerRevolution;
         
     }
 }

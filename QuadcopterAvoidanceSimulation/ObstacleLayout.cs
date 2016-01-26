@@ -18,6 +18,7 @@ namespace QuadcopterAvoidanceSimulation
             _Obstacles = new ArrayList();
             _Obstacles.Add(new Obstacle(0,100, 100,100));
             _Obstacles.Add(new Obstacle(100,100, 100,300));
+            _Obstacles.Add(new Obstacle(200, 100, 200, 300));
             _Obstacles.Add(new Obstacle(300,300,400,400));
         }
         public ArrayList Obstacles { get {return _Obstacles ;}}
